@@ -2,24 +2,42 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { setIsLoading } from "./isLoading.slice";
 
-export const newsSlice = createSlice({
-    name: 'news',
+export const productsSlice = createSlice({
+    name: 'products',
     initialState: [],
     reducers:{
-        setNews: (state, action) => {
+        setproducts: (state, action) => {
             return action.payload
         }
 
     }
 })
 
-export const getNewsThunk = () => dispatch =>{
+export const getproductsThunk = () => dispatch =>{
     dispatch(setIsLoading(true));
     axios.get("https://e-commerce-api.academlo.tech/api/v1/products")
-        .then(res => dispatch(setNews(res.data)))
+        .then(res => dispatch(setproducts(res.data.data.products)))
         .finally(()=>dispatch(setIsLoading(false)));
 }
 
-export const { setNews }= newsSlice.actions;
+export const filterProductThunk = (id) => (dispatch) => {
+    dispatch(setIsLoading(true));
+    return axios
+      .get(`https://e-commerce-api.academlo.tech/api/v1/products?category=${id}`)
+      .then((res) => dispatch(setproducts(res.data.data.products)))
+      .finally(() => dispatch(setIsLoading(false)));
+  };
 
-export default newsSlice.reducer;
+export const filterHeadlineThunk = (inputSearch) => (dispatch) => {
+    dispatch(setIsLoading(true));
+    return axios
+      .get(
+        `https://e-commerce-api.academlo.tech/api/v1/products?query=${inputSearch}`
+      )
+      .then((res) => dispatch(setproducts(res.data.data.products)))
+      .finally(() => dispatch(setIsLoading(false)));
+  }
+
+export const { setproducts }= productsSlice.actions;
+
+export default productsSlice.reducer;

@@ -19,7 +19,7 @@ function App() {
       {isLoading && <LoadingScreen/>}
       <Routes>
         <Route path='/' element={<Home/>}/>
-        <Route path='/products:id' element={<ProductsId/>}/>
+        <Route path='/products/:id' element={<ProductsId/>}/>
         <Route path='/purchases' element={<Purchases/>}/>
         <Route path='/login' element={<Login/>}/>
 
