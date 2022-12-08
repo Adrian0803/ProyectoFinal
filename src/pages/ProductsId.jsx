@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Col, ListGroup, ListGroupItem, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { getproductsThunk } from '../store/slices/news.slice';
@@ -18,7 +19,8 @@ const ProductsId = () => {
 
     const product = productsList.find(productsItem => productsItem.id === Number(id))
     const relatedProducts = productsList.filter(productsItem =>
-        productsItem.category.id === product.category.id
+        productsItem.category.id === product.category.id &&
+        productsItem.id !== product.id
 
     )
     console.log(relatedProducts);
@@ -26,21 +28,42 @@ const ProductsId = () => {
     return (
         <div>
             <h1>{product?.title} </h1>
-            <br />
-            <br />
-            <img src={product?.productImgs[0]} style={{ width: 400 }} alt="" />
-            <h2>Related Products</h2>
-            {relatedProducts.map(productsItem => (
+            <Row>
+                {/* El producto seleccionado*/}
+                <Col lg={9}>
 
-                <li>
-                    <Link to={`/products/${productsItem.id}`}>
-                        {productsItem.title}
-                    </Link>
-
+                    <img src={product?.productImgs[0]} style={{ width: 400 }} alt="" className='img-fluid' />
+                    <p >{product?.description} </p>
+                    <p>Price:  ${product?.price}</p>
                     <br />
-                    <img src={productsItem.productImgs[0]} style={{ width: 200 }} alt="" />
-                </li>
-            ))}
+
+
+                </Col>
+                {/* Los productos relacionados*/}
+                <Col lg={3}>
+
+                    <h2>Related Products</h2>
+                    <ListGroup variant="flush">
+
+                        {relatedProducts.map(productsItem => (
+
+                            <ListGroup.Item>
+                                <Link to={`/products/${productsItem.id}`}>
+                                    {productsItem.title}
+                                    <br />
+                                    <img src={productsItem.productImgs[0]} className="img-fluid" />
+                                </Link>
+                                <p>Price:  ${productsItem.price}</p>
+
+
+                            </ListGroup.Item>
+                        ))}
+                    </ListGroup>
+                </Col>
+
+            </Row>
+            <br />
+            <br />
 
 
         </div>
